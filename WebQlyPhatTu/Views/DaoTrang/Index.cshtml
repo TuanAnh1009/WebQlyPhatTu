@@ -180,7 +180,7 @@
     <div class="show-view" id="show-edit">
         <div class="bg-show"></div>
         <div class="container-view">
-            <form class="form-create" method="post" asp-area="" asp-controller="Chua" asp-action="Edit">
+            <form class="form-create" method="post" asp-area="" asp-controller="DaoTrang" asp-action="Edit">
                 <div class="title-form">Cập nhật đạo tràng</div>
                 <input type="hidden" name="DaoTrangId" id="e-daoTrangId" value="">
                 <div class="info">
@@ -246,10 +246,10 @@
             var trutriid = $(this).data('trutriid');
 
             // Gán giữ liệu cho value input để show
-            $("#e-chuaId").val(chuaid);
-            $("#e-tenChua").val(tenchua);
-            $("#e-diaChi").val(diachi);
-            $("#e-ngayThanhLap").val(ngaythanhlap);
+            $("#e-daoTrangId").val(daotrangid);
+            $("#e-noiDung").val(noidung);
+            $("#e-noiToChuc").val(noitochuc);
+            $("#e-daKetThuc").val(daketthuc);
             $("#e-truTri").val(trutriid);
             $("body").css("overflow", "hidden");
             $("#show-edit").show();

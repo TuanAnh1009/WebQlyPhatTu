@@ -25,6 +25,7 @@ namespace WebQlyPhatTu.Controllers
             var pagechua = new PageResult<Chua>(pagination, listchua);
             return View(pagechua);
         }
+
         [HttpPost]
         public IActionResult Create(ChuaDto dto)
         {
