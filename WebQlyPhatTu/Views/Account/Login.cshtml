@@ -1,0 +1,20 @@
+﻿@model Login
+<div class="account-form" style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 68px)">
+    <form class="form-register" asp-controller="Account" asp-action="Login" method="post" style="width:100%; max-width: 480px; background: #fff; border-radius: 5px; padding: 16px 0">
+        <div class="title-form">Đăng nhập</div>
+        <input type="hidden" name="PhatTuId" id="e-phatTuId" value="">
+        <div class="info">
+            <div class="item-info" style="width: 100%">
+                <label class="name-info">Email</label>
+                <input type="text" placeholder="Nhập email" name="Email" id="e-email" required />
+            </div>
+            <div class="item-info" style="width: 100%">
+                <label class="name-info">Mật khẩu</label>
+                <input type="password" placeholder="Nhập mật khẩu" name="PassWord" id="e-password" required />
+            </div>
+        </div>
+        <div class="area-btn">
+            <button type="submit" class="btn-ok">Đăng nhập</button>
+        </div>
+    </form>
+</div>
