@@ -49,7 +49,7 @@
         <div class="show-view" id="show-create">
             <div class="bg-show"></div>
             <div class="container-view">
-                <form class="form-create" method="post" asp-area="" asp-controller="PhatTu" asp-action="Create">
+                <form class="form-create" method="post" asp-area="" asp-controller="QuanLyPhatTu" asp-action="Create">
                     <div class="title-form">Thêm phật tử</div>
                     <input type="hidden" name="PhatTuId" id="phatTuId" value="">
                     <div class="info">
@@ -185,7 +185,7 @@
             </div>
         </div>
         <div class="filter-data">
-            <form method="get" asp-controller="PhatTu" asp-action="Index">
+            <form method="get" asp-controller="QuanLyPhatTu" asp-action="Index">
                 <select name="PageSize" id="PageSize" onchange="form.submit()">
                     <option selected>Hiển thị @Model.ListPhatTu.Data.ToList().Count() trên @Model.ListPhatTu.Pagination.TotalCount</option>
                     <option value="5" >Hiển thị 5</option>
@@ -313,7 +313,7 @@
     <div class="show-view" id="show-edit">
         <div class="bg-show"></div>
         <div class="container-view">
-            <form class="form-create" method="post" asp-area="" asp-controller="PhatTu" asp-action="Edit">
+            <form class="form-create" method="post" asp-area="" asp-controller="QuanLyPhatTu" asp-action="Edit">
                 <div class="title-form">Thêm phật tử</div>
                 <input type="hidden" name="PhatTuId" id="e-phatTuId" value="">
                 <div class="info">
@@ -489,7 +489,7 @@
             var pageSize = $(this).data("page-size")
 
             // Gửi yêu cầu đến server với pageNumber và pageSize đã chọn
-            window.location.href = "/PhatTu?PageSize=" + pageSize + "&PageNumber=" + pageNumber;
+            window.location.href = "/QuanLyPhatTu?PageSize=" + pageSize + "&PageNumber=" + pageNumber;
         });
     });
 </script>

@@ -31,11 +31,16 @@ namespace WebQlyPhatTu.Controllers
         public IActionResult Register(Register dto)
         {
             var res = userServices.Register(dto);
-            return RedirectToAction("Index", "PhatTu");
+            return RedirectToAction("Login");
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
+            string token = Request.Cookies["token"];
+            if (!string.IsNullOrEmpty(token)){
+                Logout();
+            }
             return View("Login");
         }
 
@@ -52,7 +57,7 @@ namespace WebQlyPhatTu.Controllers
                     Expires = DateTime.UtcNow.AddMinutes(20)
                 });
             }
-            return RedirectToAction("Index", "PhatTu");
+            return RedirectToAction("Index", "Home");
         }
 
         private string GenerateToken(PhatTu phatTu)
@@ -77,17 +82,12 @@ namespace WebQlyPhatTu.Controllers
             var TokenHandler = Token.CreateToken(tokenDescription);
             return Token.WriteToken(TokenHandler);
         }
-        public static string GetEmailFromToken(string jwtToken)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.ReadJwtToken(jwtToken);
 
-            var emailClaim = token.Claims.FirstOrDefault(c => c.Type == "email");
-            if (emailClaim != null)
-            {
-                return emailClaim.Value;
-            }
-            return null;
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("token");
+            return RedirectToAction("Login");
         }
     }
 }

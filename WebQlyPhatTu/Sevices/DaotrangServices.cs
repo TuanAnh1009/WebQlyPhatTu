@@ -80,6 +80,32 @@ namespace WebQlyPhatTu.Sevices
             return query;
         }
 
+        public IQueryable<DaoTrang> GetDaoTrangByTruTri(int trutriid,string? noitochuc)
+        {
+            var query = appDbContext.DaoTrang.Where(x => x.NguoiTruTri == trutriid).AsQueryable();
+            if (!string.IsNullOrEmpty(noitochuc))
+            {
+                query = query.Where(x => x.NoiToChuc.ToLower().Contains(noitochuc.ToLower()));
+            }
+            return query;
+        }
+
+        public IQueryable<DaoTrang> GetDaoTrangActive(string? noitochuc)
+        {
+            var query = appDbContext.DaoTrang.Where(x => x.DaKetThuc == false).AsQueryable();
+            if (!string.IsNullOrEmpty(noitochuc))
+            {
+                query = query.Where(x => x.NoiToChuc.ToLower().Contains(noitochuc.ToLower()));
+            }
+            return query;
+        }
+
+        public string GetNameTruTri(int id)
+        {
+            var trutri = appDbContext.PhatTu.SingleOrDefault(x => x.PhatTuId == id);
+            return trutri.Ho + " " + trutri.TenDem + " " + trutri.Ten;
+        }
+
         public ReturnObject<DaoTrang> UpdateDaoTrang(DaoTrangDto dto)
         {
             try

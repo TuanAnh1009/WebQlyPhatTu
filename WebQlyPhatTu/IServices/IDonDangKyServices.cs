@@ -8,7 +8,7 @@ namespace WebQlyPhatTu.IServices
     {
         ReturnObject<DonDangKy> GuiDon(int phattuid, DonDangKyDto dto);
         ReturnObject<DonDangKy> XacNhanDon(int userid, XacNhanDonDto dto);
-        IQueryable<DaoTrang> GetDaoTrangByNTT(int nguoitrutri);
-        IQueryable<DonDangKy> GetDonDangKyByDT(int daotrangid);
+        IQueryable<DonDangKy> GetDonDangKy(string? noitochuc, DateTime? ngayguidon, int? trangthaidon);
+        IQueryable<DonDangKy> GetDonDangKyByTruTri(int nguoitrutri, string? noitochuc, DateTime? ngayguidon, int? trangthaidon);
     }
 }

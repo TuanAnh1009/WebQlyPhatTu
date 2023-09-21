@@ -1,4 +1,5 @@
-﻿using WebQlyPhatTu.Dto;
+﻿using Microsoft.EntityFrameworkCore;
+using WebQlyPhatTu.Dto;
 using WebQlyPhatTu.Helper;
 using WebQlyPhatTu.IServices;
 using WebQlyPhatTu.Models;
@@ -14,16 +15,33 @@ namespace WebQlyPhatTu.Sevices
             appDbContext = new AppDbContext();
         }
 
-        public IQueryable<DaoTrang> GetDaoTrangByNTT(int nguoitrutri)
+        public IQueryable<DonDangKy> GetDonDangKy(string? noitochuc, DateTime? ngayguidon, int? trangthaidon)
         {
-            var query = appDbContext.DaoTrang.Where(x => x.NguoiTruTri == nguoitrutri);
+            var query = appDbContext.DonDangKy.Include(x => x.PhatTu).Include(y => y.DaoTrang).AsQueryable();
+            if(!string.IsNullOrWhiteSpace(noitochuc) )
+            {
+                query = query.Where(x => x.DaoTrang.NoiToChuc.ToLower().Contains(noitochuc.ToLower()));
+            }
+            if(ngayguidon.HasValue)
+            {
+                query = query.Where(x => x.NgayGuiDon == ngayguidon);
+            }
+            if (trangthaidon.HasValue)
+            {
+                query = query.Where(x => x.TrangThaiDon == trangthaidon);
+            }
             return query;
         }
 
-        public IQueryable<DonDangKy> GetDonDangKyByDT(int daotrangid)
+        public IQueryable<DonDangKy> GetDonDangKyByTruTri(int nguoitrutri, string? noitochuc, DateTime? ngayguidon, int? trangthaidon)
         {
-            var query = appDbContext.DonDangKy.Where(x => x.DaoTrangId == daotrangid).AsQueryable();
-            return query;
+            var listdaotrang = appDbContext.DaoTrang.Include(x => x.LstDondangkys).ThenInclude(y => y.PhatTu).Where(x => x.NguoiTruTri == nguoitrutri);
+            List<DonDangKy> query = new List<DonDangKy>();
+            foreach(DaoTrang daoTrang in listdaotrang) 
+            {
+                query = query.Concat(daoTrang.LstDondangkys.ToList()).ToList();
+            }
+            return query.AsQueryable();
         }
 
         public ReturnObject<DonDangKy> GuiDon(int phattuid, DonDangKyDto dto)

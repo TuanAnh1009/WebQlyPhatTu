@@ -21,7 +21,18 @@ namespace WebQlyPhatTu.Sevices
 
         public int GetIdFromToken(string token)
         {
-            throw new NotImplementedException();
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            var phatTuId = jwtToken.Claims.FirstOrDefault(c => c.Type == "PhatTuId");
+            if (int.TryParse(phatTuId.Value, out int id))
+            {
+                return id;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public PhatTu GetUserFromToken(string token)
@@ -32,7 +43,7 @@ namespace WebQlyPhatTu.Sevices
             var phatTuId = jwtToken.Claims.FirstOrDefault(c => c.Type == "PhatTuId");
             if(int.TryParse(phatTuId.Value, out int id))
             {
-                var phatTu = dbContext.PhatTu.Include(x => x.UserRoles).ThenInclude(y => y.Role).SingleOrDefault(x => x.PhatTuId == id);
+                var phatTu = dbContext.PhatTu.Include(a => a.KieuThanhVien).Include(x => x.UserRoles).ThenInclude(y => y.Role).SingleOrDefault(x => x.PhatTuId == id);
                 return phatTu;
             }
             else

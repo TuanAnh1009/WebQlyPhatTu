@@ -36,6 +36,7 @@ header {
 }
 
 .account-user {
+    position: relative;
     display: flex;
     gap: 8px;
     align-items: center;
@@ -51,6 +52,17 @@ header {
     fill: #757575;
     width: 30px;
     height: 30px;
+}
+
+.nav-account {
+    display: none;
+    position: absolute;
+    font-size: 12px;
+    right: 0;
+    top: 35px;
+    width: 135px;
+    padding: 10px 5px;
+    background-color: #d9d9d9;
 }
 
 nav {
@@ -284,7 +296,7 @@ main {
 }
 
 .col-3 {
-    width: calc(33% - 13px);
+    width: calc(33.2% - 13px);
 }
 
 .item-infor .name-infor {

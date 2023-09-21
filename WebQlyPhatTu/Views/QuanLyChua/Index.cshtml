@@ -29,7 +29,7 @@
         <div class="show-view" id="show-create">
             <div class="bg-show"></div>
             <div class="container-view">
-                <form class="form-create" method="post" asp-area="" asp-controller="Chua" asp-action="Create">
+                <form class="form-create" method="post" asp-area="" asp-controller="QuanLyChua" asp-action="Create">
                     <div class="title-form">Thêm chùa</div>
                     <input type="hidden" name="ChuaId" id="chuaId" value="">
                     <input type="hidden" name="TruTri" id="truTriId" value="1">
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="filter-data">
-            <form method="get" asp-controller="Chua" asp-action="Index">
+            <form method="get" asp-controller="QuanLyChua" asp-action="Index">
                 <select name="PageSize" id="PageSize" onchange="form.submit()">
                     <option selected>Hiển thị @Model.Data.ToList().Count() trên @Model.Pagination.TotalCount</option>
                     <option value="5">Hiển thị 5</option>
@@ -175,7 +175,7 @@
     <div class="show-view" id="show-edit">
         <div class="bg-show"></div>
         <div class="container-view">
-            <form class="form-create" method="post" asp-area="" asp-controller="Chua" asp-action="Edit">
+            <form class="form-create" method="post" asp-area="" asp-controller="QuanLyChua" asp-action="Edit">
                 <div class="title-form">Cập nhật chùa</div>
                 <input type="hidden" name="ChuaId" id="e-chuaId" value="">
                 <div class="info">
@@ -252,7 +252,7 @@
             var pageSize = $(this).data("page-size")
 
             // Gửi yêu cầu đến server với pageNumber và pageSize đã chọn
-            window.location.href = "/Chua?PageSize=" + pageSize + "&PageNumber=" + pageNumber;
+            window.location.href = "/QuanLyChua?PageSize=" + pageSize + "&PageNumber=" + pageNumber;
         });
     });
 </script>

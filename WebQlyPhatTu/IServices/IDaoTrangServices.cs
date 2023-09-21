@@ -10,5 +10,8 @@ namespace WebQlyPhatTu.IServices
         ReturnObject<DaoTrang> UpdateDaoTrang(DaoTrangDto dto);
         ReturnObject<string> DeleteDaoTrang(int id);
         IQueryable<DaoTrang> GetDaoTrang(string? noitochuc);
+        IQueryable<DaoTrang> GetDaoTrangByTruTri(int trutriid,string? noitochuc);
+        IQueryable<DaoTrang> GetDaoTrangActive(string? noitochuc);
+        string GetNameTruTri(int id);
     }
 }

@@ -7,23 +7,34 @@ using WebQlyPhatTu.Sevices;
 
 namespace WebQlyPhatTu.Controllers
 {
-    public class ChuaController : Controller
+    public class QuanLyChuaController : Controller
     {
         private readonly IChuaServices chuaServices;
+        private readonly IGetInfoFromToken getInfo;
 
-        public ChuaController()
+        public QuanLyChuaController()
         {
             chuaServices = new ChuaServices();
+            getInfo = new GetInfoFromTokenService();
         }
 
         [HttpGet]
         public IActionResult Index(string? tenchua, Pagination? pagination)
         {
-            var query = chuaServices.GetChua(tenchua);
-            var listchua = PageResult<Chua>.ToPageResult(pagination!, query);
-            pagination!.TotalCount = query.ToList().Count();
-            var pagechua = new PageResult<Chua>(pagination, listchua);
-            return View(pagechua);
+            string token = Request.Cookies["token"];
+            var user = getInfo.GetUserFromToken(token);
+            if (token != null && user.UserRoles.Role.Code == "ADMIN")
+            {
+                var query = chuaServices.GetChua(tenchua);
+                var listchua = PageResult<Chua>.ToPageResult(pagination!, query);
+                pagination!.TotalCount = query.ToList().Count();
+                var pagechua = new PageResult<Chua>(pagination, listchua);
+                return View(pagechua);
+            }
+            else
+            {
+                return BadRequest("Không thể truy cập");
+            }
         }
 
         [HttpPost]
