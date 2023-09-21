@@ -64,15 +64,15 @@ namespace WebQlyPhatTu.Sevices
             {
                 if (string.IsNullOrEmpty(dto.PassWord) || string.IsNullOrEmpty(dto.Email))
                 {
-                    throw new Exception("Email or password can't be blank");
+                    throw new Exception("Email hoặc mật khẩu không được để trống.");
                 }
                 if (User == null || BCrypt.Net.BCrypt.Verify(dto.PassWord, User.PassWord) == false)
                 {
-                    throw new Exception("email or password is incorrect");
+                    throw new Exception("Email hoặc mật khẩu không chính sác.");
                 }
                 if (User.IsActive == false)
                 {
-                    throw new Exception("Account has been deleted");
+                    throw new Exception("Tài khoản đã bị khóa.");
                 }
             }
             catch (Exception ex)
@@ -97,11 +97,11 @@ namespace WebQlyPhatTu.Sevices
             {
                 if (dbContext.PhatTu.Any(x => x.Email == dto.Email))
                 {
-                    throw new Exception("Email already exists");
+                    throw new Exception("Email đã được sử dụng.");
                 }
                 if (!IsValidEmail(dto.Email))
                 {
-                    throw new Exception("Email invalidate");
+                    throw new Exception("Email không đúng định dạng.");
                 }
             }
             catch (Exception ex)

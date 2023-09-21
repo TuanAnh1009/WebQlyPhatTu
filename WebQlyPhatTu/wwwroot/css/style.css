@@ -313,6 +313,11 @@ main {
     line-height: 24px;
 }
 
+.error-input {
+    color: red;
+    font-size: 11px;
+}
+
 .item-info select {
     height: 26px;
 }

@@ -31,7 +31,17 @@ namespace WebQlyPhatTu.Controllers
         public IActionResult Register(Register dto)
         {
             var res = userServices.Register(dto);
-            return RedirectToAction("Login");
+            if (ModelState.IsValid)
+            {
+                if (!res.Error)
+                {
+                    return RedirectToAction("Login");
+                } else
+                {
+                    ModelState.AddModelError("Email", res.Mes);
+                }
+            }
+            return View("Register");
         }
 
         [HttpGet]
@@ -48,7 +58,7 @@ namespace WebQlyPhatTu.Controllers
         public IActionResult Login(Login dto)
         {
             var res = userServices.Login(dto);
-            if(!res.Error)
+            if (!res.Error)
             {
                 var token = GenerateToken(res.Data);
                 Response.Cookies.Append("token", token, new CookieOptions
@@ -56,8 +66,12 @@ namespace WebQlyPhatTu.Controllers
                     HttpOnly = true,
                     Expires = DateTime.UtcNow.AddMinutes(20)
                 });
+                return RedirectToAction("Index", "Home");
+            } else 
+            {
+                ModelState.AddModelError("Email", res.Mes);
             }
-            return RedirectToAction("Index", "Home");
+            return View("Login");
         }
 
         private string GenerateToken(PhatTu phatTu)
