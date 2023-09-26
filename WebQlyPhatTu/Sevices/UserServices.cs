@@ -30,6 +30,23 @@ namespace WebQlyPhatTu.Sevices
             }
         }
 
+        public string DeleteAvatar(int id)
+        {
+            try
+            {
+                var user = dbContext.PhatTu.SingleOrDefault(x => x.PhatTuId == id);
+                user.AnhChup = null;
+                dbContext.Update(user);
+                dbContext.SaveChanges();
+                return "Xóa thành công";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
+
         public ReturnObject<PhatTu> GetbyId(int phatTuId)
         {
             try
@@ -136,6 +153,56 @@ namespace WebQlyPhatTu.Sevices
                 Mes = "Sign Up Success",
                 Data = CreatePhatTu
             };
+        }
+
+        public ReturnObject<UpdateUserDto> UpdateUser(UpdateUserDto dto)
+        {
+            try
+            {
+                var user = dbContext.PhatTu.SingleOrDefault(x => x.PhatTuId == dto.PhatTuId);
+                if(user == null)
+                {
+                    throw new Exception("Tài khoản không tồn tại");
+                };
+                user.Email = dto.Email;
+                user.GioiTinh = dto.GioiTinh;
+                user.Ho = dto.Ho;
+                user.NgaySinh = dto.NgaySinh;
+                user.PhapDanh = dto.PhapDanh;
+                user.SoDienThoai = dto.SoDienThoai;
+                user.Ten = dto.Ten;
+                user.TenDem = dto.TenDem;
+                user.ChuaId = dto.ChuaId;
+                dbContext.Update(user);
+                dbContext.SaveChanges();
+                return new ReturnObject<UpdateUserDto>
+                {
+                    Error = false,
+                    Mes = "Cập nhật thành công",
+                    Data = dto
+                };
+            } catch (Exception ex)
+            {
+                return new ReturnObject<UpdateUserDto>
+                {
+                    Error = true,
+                    Mes = ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<string> UploadAvatar(int id, string avatarUrl)
+        {
+            var user = dbContext.PhatTu.SingleOrDefault(x => x.PhatTuId == id);
+            if (user == null)
+            {
+                throw new Exception("Not logged in");
+            }
+            user.AnhChup = avatarUrl;
+            dbContext.Update(user);
+            dbContext.SaveChanges();
+            return "success";
         }
     }
 }

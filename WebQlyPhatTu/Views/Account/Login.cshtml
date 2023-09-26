@@ -10,8 +10,8 @@
             <div class="item-info" style="width: 100%">
                 <label class="name-info">Mật khẩu</label>
                 <input type="password" placeholder="Nhập mật khẩu" asp-for="PassWord" id="e-password" />
+                <span asp-validation-for="Email" style="color: red"></span>
             </div>
-            <span asp-validation-for="Email" style="color: red"></span>
         </div>
         <div class="area-btn">
             <button type="submit" asp-controller="Account" asp-action="Login" class="btn-ok">Đăng nhập</button>

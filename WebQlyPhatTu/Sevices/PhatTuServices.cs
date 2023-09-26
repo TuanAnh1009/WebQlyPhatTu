@@ -175,15 +175,40 @@ namespace WebQlyPhatTu.Sevices
                 objlist.Add(new ObjList
                 {
                     Id = item.ChuaId,
-                    Name = item.TenChua
+                    Name = item.TenChua + "-" +item.DiaChi
                 });
             }
             return objlist;
         }
 
-        public List<string> ListKieuThanhVien()
+        public List<ObjList> ListKieuThanhVien()
         {
-            throw new NotImplementedException();
+            var listchua = dbContext.KieuThanhVien.ToList();
+            List<ObjList> objlist = new List<ObjList>();
+            foreach (var item in listchua)
+            {
+                objlist.Add(new ObjList
+                {
+                    Id = item.KieuThanhVienId,
+                    Name = item.TenKieu
+                });
+            }
+            return objlist;
+        }
+
+        public List<ObjList> ListTruTri()
+        {
+            var listtrutri = dbContext.PhatTu.Include(x => x.KieuThanhVien).Where(y => y.KieuThanhVien.Code == "TRUTRI");
+            List<ObjList> objlist = new List<ObjList>();
+            foreach (PhatTu item in listtrutri)
+            {
+                objlist.Add(new ObjList
+                {
+                    Id = item.PhatTuId,
+                    Name = $"{item.Ho} {item.TenDem} {item.Ten}"
+                });
+            }
+            return objlist;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebQlyPhatTu.Dto;
+using WebQlyPhatTu.Helper;
 using WebQlyPhatTu.IServices;
 using WebQlyPhatTu.Models;
 using WebQlyPhatTu.Sevices;
@@ -15,13 +16,28 @@ namespace WebQlyPhatTu.Controllers
     {
         private readonly IUserServices userServices;
         private readonly IConfiguration configuration;
+        private readonly IGetInfoFromToken getInfo;
 
         public AccountController(IConfiguration _configuration)
         {
             userServices = new UserServices();
             configuration = _configuration;
+            getInfo = new GetInfoFromTokenService();
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            string token = Request.Cookies["token"];
+            if(!string.IsNullOrEmpty(token))
+            {
+                PhatTu user = getInfo.GetUserFromToken(token);
+                return View(user);
+            }
+            return RedirectToAction("Login", "Account");
+        }
+
+        [HttpGet]
         public IActionResult Register()
         {
             return View("Register");
@@ -102,6 +118,39 @@ namespace WebQlyPhatTu.Controllers
         {
             Response.Cookies.Delete("token");
             return RedirectToAction("Login");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadAvatar(IFormFile file)
+        {
+            try
+            {
+                var token = Request.Cookies["token"];
+                var userid = getInfo.GetIdFromToken(token);
+                string link = await UploadFile.Upload(file);
+                var res = await userServices.UploadAvatar(userid, link);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult DeleteAvatar()
+        {
+            var token = Request.Cookies["token"];
+            var userid = getInfo.GetIdFromToken(token);
+            var res = userServices.DeleteAvatar(userid);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateUser(UpdateUserDto dto)
+        {
+            var res = userServices.UpdateUser(dto);
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,4 +1,14 @@
 ﻿@model PageResult<DaoTrang>
+@inject IDaoTrangServices getName;
+@inject IPhatTuServices phatTuServices;
+@inject IGetInfoFromToken getInfo;
+@inject IHttpContextAccessor HttpContextAccessor;
+@{
+    string token = HttpContextAccessor.HttpContext.Request.Cookies["token"];
+    List<ObjList> ListTruTri = phatTuServices.ListTruTri();
+    PhatTu user = getInfo.GetUserFromToken(token);
+    string username = getName.GetNameTruTri(user.PhatTuId);
+}
 
 <div class="content">
     <div class="title-page">
@@ -19,7 +29,7 @@
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                     </svg>
                 </button>
-                <div class="button btn-create" ">
+                <div class="button btn-create">
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                         <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                     </svg>
@@ -32,15 +42,33 @@
                 <form class="form-create" method="post" asp-area="" asp-controller="QuanLyDaoTrang" asp-action="Create">
                     <div class="title-form">Thêm đạo tràng</div>
                     <input type="hidden" name="DaoTrangId" id="daoTrangId" value="">
-                    <input type="hidden" name="NguoiTruTri" id="truTriId" value="1">
                     <div class="info">
-                        <div class="item-info col-3">
+                        <div class="item-info" style="width: 100%">
                             <label class="name-info">Nội dung</label>
                             <input type="text" placeholder="Nhập nội dung" name="NoiDung" id="noiDung" value="" required />
                         </div>
                         <div class="item-info col-3">
                             <label class="name-info">Nơi tổ chức</label>
                             <input type="text" placeholder="Nhập địa chỉ" name="NoiToChuc" id="noiToChuc" value="" />
+                        </div>
+                        <div class="item-info col-3">
+                            <label class="name-info">Người trụ trì</label>
+                            @{
+                                if(user.UserRoles.Role.Code == "ADMIN")
+                                {
+                                    <select name="NguoiTruTri" style="width: 100%">
+                                        <option disabled selected>Chọn trụ trì</option>
+                                        @foreach(var trutri in ListTruTri)
+                                        {
+                                            <option value="@trutri.Id" >@trutri.Name</option>
+                                        }
+                                    </select>
+                                } else
+                                {
+                                     <input type="text" name="NguoiTruTri" id="noiToChuc" value="@username" disabled/>
+                                }
+                            } 
+                            
                         </div>
                         <div class="item-info col-3">
                             <label class="name-info">Trạng thái</label>
@@ -69,15 +97,19 @@
                             <label class="name-info">Nội Dung</label>
                             <input type="text" placeholder="Nhập nội dung" name="NoiDung" id="NoiDung" value="" disabled />
                         </div>
-                        <div class="item-info col-3">
+                        <div class="item-info">
                             <label class="name-info">Nơi tổ chức</label>
                             <input type="text" placeholder="Nhập địa chỉ" name="NoiToChuc" id="NoiToChuc" value="" disabled />
                         </div>
-                        <div class="item-info col-3">
+                        <div class="item-info">
                             <label class="name-info">Người trụ trì</label>
                             <input type="text" placeholder="Nhập địa chỉ" name="NguoiTruTri" id="NguoiTruTri" value="" disabled />
                         </div>
-                        <div class="item-info col-3">
+                        <div class="item-info">
+                            <label class="name-info">Số thành viên</label>
+                            <input type="text" placeholder="0" name="SoThanhVien" id="SoThanhVien" value="" disabled />
+                        </div>
+                        <div class="item-info">
                             <label class="name-info">Trạng thái</label>
                             <input type="text" name="DaKetThuc" id="DaKetThuc" disabled />
                         </div>
@@ -101,16 +133,19 @@
                 <tr style="height: 40px">
                     <th>
                     </th>
-                    <th style="width: 30%;">
+                    <th style="width: 20%;">
                         Người trụ trì
                     </th>
-                    <th style="width: 40%;">
+                    <th style="width: 45%;">
                         Nội dung
                     </th>
-                    <th style="width: 20%;">
+                    <th style="width: 15%; text-align: center">
                         Nơi tổ chức
                     </th>
-                    <th style="width: 10%;">
+                    <th style="width: 10%; text-align: center">
+                        Số thành viên
+                    </th>
+                    <th style="width: 10%; text-align: center">
                         Trạng thái
                     </th>
                     <th>
@@ -120,31 +155,34 @@
             <tbody>
                 @foreach (var daotrang in Model.Data)
                 {
+                    string tentrutri = getName.GetNameTruTri(daotrang.NguoiTruTri);
+                  
                     <tr>
                         <td>
                             <div class="view-info" id="daotrang-@daotrang.DaoTrangId" data-daotrangid="@daotrang.DaoTrangId" data-noidung="@daotrang.NoiDung" data-noitochuc="@daotrang.NoiToChuc"
-                                 data-daketthuc="@daotrang.DaKetThuc" data-trutriid="@daotrang.NguoiTruTri">
+                                 data-daketthuc="@daotrang.DaKetThuc" data-tentrutri="@tentrutri" data-sothanhvien="@daotrang.SoThanhVienThamGia">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
                                     <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
                                 </svg>
                             </div>
                         </td>
-                        <td>@daotrang.NguoiTruTri</td>
+                        <td>@tentrutri</td>
                         <td>@daotrang.NoiDung</td>
-                        <td>@daotrang.NoiToChuc</td>
+                        <td style="text-align: center">@daotrang.NoiToChuc</td>
+                        <td style="text-align: center">@daotrang.SoThanhVienThamGia</td>
                         @{
                             if (daotrang.DaKetThuc == true)
                             {
-                                <td>Đã kết Thúc</td>
+                                <td style="text-align: center">Đã kết Thúc</td>
                             }
                             else
                             {
-                                <td>Đang diễn ra</td>
+                                <td style="text-align: center">Đang diễn ra</td>
                             }
                         }
                         <td>
                             <div class="edit-info" id="edit-info" data-daotrangid="@daotrang.DaoTrangId" data-noidung="@daotrang.NoiDung" data-noitochuc="@daotrang.NoiToChuc"
-                                 data-daketthuc="@daotrang.DaKetThuc" data-trutriid="@daotrang.NguoiTruTri">
+                                 data-daketthuc="@daotrang.DaKetThuc" data-tentrutri="@tentrutri" data-sothanhvien ="@daotrang.SoThanhVienThamGia">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                                     <path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z" />
                                 </svg>
@@ -194,16 +232,16 @@
                 <input type="hidden" name="DaoTrangId" id="e-daoTrangId" value="">
                 <input type="hidden" name="NguoiTruTri" id="e-truTri" value="">
                 <div class="info">
-                    <div class="item-info col-3">
+                    <div class="item-info" style="width: 100%">
                         <label class="name-info">Nội dung</label>
                         <input type="text" placeholder="Nhập nội dung" name="NoiDung" id="e-noiDung" value="" required />
                     </div>
-                    <div class="item-info col-3">
+                    <div class="item-info">
                         <label class="name-info">Nơi tổ chức</label>
                         <input type="text" placeholder="Nhập địa chỉ" name="NoiToChuc" id="e-noiToChuc" value="" />
                     </div>
 
-                    <div class="item-info col-3">
+                    <div class="item-info">
                         <label class="name-info">Trạng thái</label>
                         <select name="DaKetThuc" id="e-daKetThuc" style="width: 100%">
                             <option value="True">Đã kết thúc</option>
@@ -235,7 +273,8 @@
             var noidung = $(this).data('noidung');
             var noitochuc = $(this).data('noitochuc');
             var daketthuc = $(this).data('daketthuc');
-            var trutriid = $(this).data('trutriid');
+            var tentrutri = $(this).data('tentrutri');
+            var sothanhvien = $(this).data('sothanhvien');
 
             if(daketthuc == "False"){
                 daketthuc = "Đang diễn ra";
@@ -248,7 +287,8 @@
             $("#NoiDung").val(noidung);
             $("#NoiToChuc").val(noitochuc);
             $("#DaKetThuc").val(daketthuc);
-            $("#NguoiTruTri").val(trutriid);
+            $("#NguoiTruTri").val(tentrutri);
+            $("#SoThanhVien").val(sothanhvien);
             $("body").css("overflow", "hidden");
             $("#show-view").show();
         });
@@ -259,14 +299,14 @@
             var noidung = $(this).data('noidung');
             var noitochuc = $(this).data('noitochuc');
             var daketthuc = $(this).data('daketthuc');
-            var trutriid = $(this).data('trutriid');
+            var tentrutri = $(this).data('tentrutri');
 
             // Gán giữ liệu cho value input để show
             $("#e-daoTrangId").val(daotrangid);
             $("#e-noiDung").val(noidung);
             $("#e-noiToChuc").val(noitochuc);
             $("#e-daKetThuc").val(daketthuc).attr("selected");
-            $("#e-truTri").val(trutriid);
+            $("#e-truTri").val(tentrutri);
             $("body").css("overflow", "hidden");
             $("#show-edit").show();
         });

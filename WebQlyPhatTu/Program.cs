@@ -18,6 +18,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddTransient<IGetInfoFromToken, GetInfoFromTokenService>();
+builder.Services.AddTransient<IChuaServices, ChuaServices>();
+builder.Services.AddTransient<IPhatTuServices, PhatTuServices>();
 builder.Services.AddTransient<IDaoTrangServices, DaoTrangServices>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();

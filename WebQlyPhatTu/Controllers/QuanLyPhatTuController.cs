@@ -24,6 +24,10 @@ namespace WebQlyPhatTu.Controllers
         {
             string token = Request.Cookies["token"];
             var user = getInfo.GetUserFromToken(token);
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (token != null && user.UserRoles.Role.Code == "ADMIN")
             {
                 var query = phatTuServices.DSPT(name, phapdanh, email, gioitinh);
@@ -31,10 +35,12 @@ namespace WebQlyPhatTu.Controllers
                 pagination.TotalCount = query.ToList().Count();
                 var pagept = new PageResult<PhatTu>(pagination, listpt);
                 var listchua = phatTuServices.ListChua();
+                var listkieuthanhvien = phatTuServices.ListKieuThanhVien();
                 var objpt = new ObjPhatTu
                 {
                     ListPhatTu = pagept,
-                    ListChua = listchua
+                    ListChua = listchua,
+                    ListKieuThanhVien = listkieuthanhvien,
                 };
                 return View(objpt);
             } else

@@ -6,6 +6,6 @@ namespace WebQlyPhatTu.Helper
     {
         public PageResult<PhatTu> ListPhatTu { get; set; }
         public List<ObjList>? ListChua { get; set; }
-        public List<KieuThanhVien>? ListKieuThanhVien { get; set; }
+        public List<ObjList>? ListKieuThanhVien { get; set; }
     }
 }

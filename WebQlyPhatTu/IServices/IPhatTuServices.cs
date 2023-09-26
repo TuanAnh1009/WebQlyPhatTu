@@ -10,6 +10,7 @@ namespace WebQlyPhatTu.IServices
         ReturnObject<PhatTu> AddPhatTu(AddPhatTuDto dto);
         ReturnObject<PhatTu> EditPhatTu(EditPhatTuDto dto);
         List<ObjList> ListChua();
-        List<string> ListKieuThanhVien();
+        List<ObjList> ListKieuThanhVien();
+        List<ObjList> ListTruTri();
     }
 }

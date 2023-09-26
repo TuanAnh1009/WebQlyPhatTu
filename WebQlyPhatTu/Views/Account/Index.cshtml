@@ -1,0 +1,118 @@
+﻿@model PhatTu
+@inject IPhatTuServices phatTuService;
+@{
+    List<ObjList> lstchua = phatTuService.ListChua();
+}
+<div class="content">
+    <div class="title-page">
+        Thông tin cá nhân
+    </div>
+    <div class="container-view" style="background-color: #fff; padding: 20px 0; border-radius: 5px">
+        <div  style="padding: 0 16px">
+            @{
+                if(Model.AnhChup == null)
+                {
+                    <img class="img-avatar" src="https://i1.wp.com/www.prairiebus.com/wp-content/uploads/2020/11/421-4212617_person-placeholder-image-transparent-hd-png-download.png?resize=768%2C734">
+                } else
+                {
+                    <img class="img-avatar" src="@Model.AnhChup" />
+                }
+            }
+            <div class="btn-avatar-area">
+                <form method="post" enctype="multipart/form-data">
+                    <button class="btn-avatar select">Chọn Ảnh</button>
+                    
+                    <input required name="file" type="file" onchange="changeImg(this)"
+                           class="image" style="display: none;">
+                    <button type="submit" class="btn-avatar save" asp-controller="Account" asp-action="UploadAvatar">Lưu</button>
+                    @if(Model.AnhChup != null)
+                    {
+                        <a class="btn-avatar delete" asp-controller="Account" asp-action="DeleteAvatar">Xóa</a>
+                    }
+                </form>
+            </div>
+        </div>
+        <form class="form-create" method="post" asp-area="" asp-controller="Account" asp-action="UpdateUser">
+            <input type="hidden" name="PhatTuId" id="e-phatTuId" value="@Model.PhatTuId">
+            <div class="info">
+                <div class="item-info col-3">
+                    <label class="name-info">Họ</label>
+                    <input type="text" placeholder="Nhập họ tên" name="Ho" id="e-ho" value="@Model.Ho" required />
+                </div>
+                <div class="item-info col-3">
+                    <label class="name-info">Tên đệm</label>
+                    <input type="text" placeholder="Nhập họ tên" name="TenDem" id="e-tenDem" value="@Model.TenDem" />
+                </div>
+                <div class="item-info col-3">
+                    <label class="name-info">Tên</label>
+                    <input type="text" placeholder="Nhập họ tên" name="Ten" id="e-ten" value="@Model.Ten" required />
+                </div>
+                <div class="item-info">
+                    <label class="name-info">Pháp Danh</label>
+                    <input type="text" placeholder="Nhập pháp danh" name="PhapDanh" id="e-phapDanh" value="@Model.PhapDanh" />
+                </div>
+                <div class="item-info">
+                    <label class="name-info">Chùa</label>
+                    <select name="ChuaId" id="e-chuaId" data-chuaid="@Model.ChuaId">
+                        <option disabled selected value="">Chọn chùa</option>
+                        @foreach(ObjList chua in lstchua)
+                        {
+                            <option value="@chua.Id">@chua.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="item-info">
+                    <label class="name-info">Email</label>
+                    <input type="text" placeholder="Nhập email" name="Email" id="e-email" value="@Model.Email" required />
+                </div>
+                <div class="item-info">
+                    <label class="name-info">Số điện thoại</label>
+                    <input type="text" placeholder="Nhập số điện thoại" name="SoDienThoai" id="e-soDienThoai" value="@Model.SoDienThoai" />
+                </div>
+                <div class="item-info">
+                    <label class="name-info">Ngày sinh</label>
+                    <input type="text" name="Ngaysinh" id="e-ngaySinh" placeholder="Nhập ngày" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" value="@Model.NgaySinh" />
+                </div>
+                <div class="item-info">
+                    <label class="name-info">Giới tính</label>
+                    <select name="GioiTinh" id="e-gioiTinh" data-gioitinh="@Model.GioiTinh" required>
+                        <option disabled selected>Chọn giới tính</option>
+                        <option value="1">Nam</option>
+                        <option value="0">Nữ</option>
+                    </select>
+                </div>
+            </div>
+            <div class="area-btn">
+                <button type="submit" class="btn-ok">Cập nhật thông tin</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function changeImg(input) {
+        //Nếu như tồn thuộc tính file, đồng nghĩa người dùng đã chọn file mới
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            //Sự kiện file đã được load vào website
+            reader.onload = function (e) {
+                //Thay đổi đường dẫn ảnh
+                $('.img-avatar').attr('src', e.target.result);
+                $('.save').show();
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    //Khi click #thumbnail thì cũng gọi sự kiện click #image
+    $(document).ready(function () {
+        var gioitinh = $("#e-gioiTinh").data('gioitinh');
+        var chuaid = $("#e-chuaId").data('chuaid');
+        $("#e-gioiTinh").val(gioitinh).attr("selected");
+        $("#e-chuaId").val(chuaid).attr("selected");
+        $('.select').click(function () {
+            $(this).siblings('.image').click();
+        });
+        $('.save').click(function () {
+            $(this).hide();
+        });
+    });
+</script>

@@ -103,7 +103,7 @@
                             <label class="name-info">Kiểu thành viên</label>
                             <select name="KieuThanhVienId" id="kieuThanhVienId" required>
                                 <option disabled selected>Chọn kiểu thành viên</option>
-                                @foreach (var chua in Model.ListChua)
+                                @foreach (var chua in Model.ListKieuThanhVien)
                                 {
                                     <option value="@chua.Id">@chua.Name</option>
                                 }
@@ -314,7 +314,7 @@
         <div class="bg-show"></div>
         <div class="container-view">
             <form class="form-create" method="post" asp-area="" asp-controller="QuanLyPhatTu" asp-action="Edit">
-                <div class="title-form">Thêm phật tử</div>
+                <div class="title-form">Sửa phật tử</div>
                 <input type="hidden" name="PhatTuId" id="e-phatTuId" value="">
                 <div class="info">
                     <div class="item-info col-3">
@@ -367,7 +367,7 @@
                         <label class="name-info">Kiểu thành viên</label>
                         <select name="KieuThanhVienId" id="e-kieuThanhVienId">
                             <option disabled selected value="">Chọn kiểu thành viên</option>
-                            @foreach (var chua in Model.ListChua)
+                            @foreach (var chua in Model.ListKieuThanhVien)
                             {
                                 <option value="@chua.Id">@chua.Name</option>
                             }

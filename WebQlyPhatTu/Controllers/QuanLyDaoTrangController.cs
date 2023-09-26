@@ -27,6 +27,10 @@ namespace WebQlyPhatTu.Controllers
         {
             var token = Request.Cookies["token"];
             var user = getInfo.GetUserFromToken(token);
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (token != null && user.UserRoles.Role.Code == "ADMIN" || user.KieuThanhVien.Code == "TRUTRI")
             {
                 IQueryable<DaoTrang> query;
