@@ -420,6 +420,7 @@
             var dahoantuc = $(this).data('dahoantuc');
             var ngayhoantuc = $(this).data('ngayhoantuc');
             var anhchup = $(this).data('anhchup');
+            var phapdanh = $(this).data('phapdanh');
             if (!anhchup) {
                 anhchup = "https://i1.wp.com/www.prairiebus.com/wp-content/uploads/2020/11/421-4212617_person-placeholder-image-transparent-hd-png-download.png?resize=768%2C734";
             }
@@ -438,6 +439,7 @@
             $("#GioiTinh").val(gioitinh);
             $("#DaHoanTuc").val(dahoantuc);
             $("#NgayHoanTuc").val(ngayhoantuc);
+            $("#PhapDanh").val(phapdanh);
             $("#AnhChup > img").attr("src", anhchup);
             $("body").css("overflow", "hidden");
             $("#show-view").show();
@@ -456,6 +458,7 @@
             var gioitinh = $(this).data('gioitinh');
             var dahoantuc = $(this).data('dahoantuc');
             var ngayhoantuc = $(this).data('ngayhoantuc');
+            var phapdanh = $(this).data('phapdanh');
             var anhchup = $(this).data('anhchup');
             var chuaid = $(this).data('chuaid');
             var kieuthanhvienid = $(this).data('kieuthanhvienid');
@@ -477,6 +480,7 @@
             $("#e-gioiTinh").val(gioitinh).attr("selected");
             $("#e-daHoanTuc").val(dahoantuc);
             $("#e-ngayHoanTuc").val(ngayhoantuc);
+            $("#e-phapDanh").val(phapdanh).attr("selected");
             $("#e-chuaId").val(chuaid).attr("selected");
             $("#e-kieuThanhVienId").val(kieuthanhvienid).attr("selected");
             //$("#e-anhChup > img").attr("src", anhchup);

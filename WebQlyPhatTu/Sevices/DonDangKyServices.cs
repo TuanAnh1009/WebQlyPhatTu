@@ -41,7 +41,20 @@ namespace WebQlyPhatTu.Sevices
             {
                 query = query.Concat(daoTrang.LstDondangkys.ToList()).ToList();
             }
-            return query.AsQueryable();
+            IQueryable<DonDangKy> Iquery = query.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(noitochuc))
+            {
+                Iquery = Iquery.Where(x => x.DaoTrang.NoiToChuc.ToLower().Contains(noitochuc.ToLower()));
+            }
+            if (ngayguidon.HasValue)
+            {
+                Iquery = Iquery.Where(x => x.NgayGuiDon == ngayguidon);
+            }
+            if (trangthaidon.HasValue)
+            {
+                Iquery = Iquery.Where(x => x.TrangThaiDon == trangthaidon);
+            }
+            return Iquery;
         }
 
         public ReturnObject<DonDangKy> GuiDon(int phattuid, DonDangKyDto dto)
@@ -97,6 +110,10 @@ namespace WebQlyPhatTu.Sevices
                 if (xacnhandon.TrangThaiDon == 1)
                 {
                     daotrang.SoThanhVienThamGia += 1;
+                }
+                if (xacnhandon.TrangThaiDon == 0 && daotrang.SoThanhVienThamGia>0)
+                {
+                    daotrang.SoThanhVienThamGia -= 1;
                 }
                 appDbContext.Update(xacnhandon);
                 appDbContext.Update(daotrang);
