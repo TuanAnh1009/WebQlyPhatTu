@@ -26,11 +26,12 @@ namespace WebQlyPhatTu.Controllers
         public IActionResult Index(string? noitochuc, Pagination? pagination)
         {
             var token = Request.Cookies["token"];
-            var user = getInfo.GetUserFromToken(token);
+            
             if (string.IsNullOrEmpty(token))
             {
                 return RedirectToAction("Login", "Account");
             }
+            var user = getInfo.GetUserFromToken(token);
             if (token != null && user.UserRoles.Role.Code == "ADMIN" || user.KieuThanhVien.Code == "TRUTRI")
             {
                 IQueryable<DaoTrang> query;
@@ -43,7 +44,7 @@ namespace WebQlyPhatTu.Controllers
                     query = daoTrangServices.GetDaoTrangByTruTri(user.PhatTuId, noitochuc);
                 }
 
-                var listdaotrang = PageResult<DaoTrang>.ToPageResult(pagination!, query);
+                IQueryable<DaoTrang> listdaotrang = PageResult<DaoTrang>.ToPageResult(pagination!, query);
                 pagination!.TotalCount = query.ToList().Count();
                 var pagedaotrang = new PageResult<DaoTrang>(pagination, listdaotrang);
                 return View(pagedaotrang);

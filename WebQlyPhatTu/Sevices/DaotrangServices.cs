@@ -100,12 +100,6 @@ namespace WebQlyPhatTu.Sevices
             return query;
         }
 
-        public string GetNameTruTri(int id)
-        {
-            var trutri = appDbContext.PhatTu.SingleOrDefault(x => x.PhatTuId == id);
-            return trutri.Ho + " " + trutri.TenDem + " " + trutri.Ten;
-        }
-
         public ReturnObject<DaoTrang> UpdateDaoTrang(DaoTrangDto dto)
         {
             try

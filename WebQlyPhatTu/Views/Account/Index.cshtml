@@ -24,7 +24,7 @@
                     
                     <input required name="file" type="file" onchange="changeImg(this)"
                            class="image" style="display: none;">
-                    <button type="submit" class="btn-avatar save" asp-controller="Account" asp-action="UploadAvatar">Lưu</button>
+                    <button type="submit" class="btn-avatar save" asp-controller="Account" asp-action="UploadAvatar">Tải lên</button>
                     @if(Model.AnhChup != null)
                     {
                         <a class="btn-avatar delete" asp-controller="Account" asp-action="DeleteAvatar">Xóa</a>
@@ -83,9 +83,36 @@
                 </div>
             </div>
             <div class="area-btn">
+                <button type="button" class="btn-ok" id="change-password">Đổi mật khẩu</button>
                 <button type="submit" class="btn-ok">Cập nhật thông tin</button>
             </div>
         </form>
+    </div>
+    <div class="show-view">
+        <div class="bg-show"></div>
+        <div class="container-view" style="max-width: 450px">
+            <div class="title-form">Đổi mật khẩu</div>
+            <form class="form-dondangky" method="post" asp-area="" asp-controller="Password" asp-action="ChangePassword">
+                <div class="info">
+                    <div class="item-info" style="width: 100%;">
+                        <label class="name-info">Mật khẩu cũ</label>
+                        <input type="text" placeholder="Nhập mật khẩu cũ" name="OldPassword"/>
+                    </div>
+                    <div class="item-info" style="width: 100%;">
+                        <label class="name-info">Mật khẩu mới</label>
+                        <input type="text" placeholder="Nhập mật khẩu mới" name="NewPassword" />
+                    </div>
+                    <div class="item-info" style="width: 100%;">
+                        <label class="name-info">Xác nhận mật khẩu mới</label>
+                        <input type="text" placeholder="Nhập lại mật khẩu mới" name="ReNewPassword" />
+                    </div>   
+                </div>
+                <input type="hidden" name="email" value="@Model.Email">
+                <div class="area-btn">
+                    <button type="submit" class="btn-ok">Đổi mật khẩu</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <script>
@@ -104,6 +131,16 @@
     }
     //Khi click #thumbnail thì cũng gọi sự kiện click #image
     $(document).ready(function () {
+        $("#change-password").click(function () {
+            $("body").css("overflow", "hidden");
+            $(".show-view").show();
+        });
+
+        $(".bg-show").click(function () {
+            $(".show-view").hide();
+            $("body").css("overflow", "unset");
+        });
+
         var gioitinh = $("#e-gioiTinh").data('gioitinh');
         var chuaid = $("#e-chuaId").data('chuaid');
         $("#e-gioiTinh").val(gioitinh).attr("selected");

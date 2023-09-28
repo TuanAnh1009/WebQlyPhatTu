@@ -12,5 +12,6 @@ namespace WebQlyPhatTu.IServices
         Task<string> UploadAvatar(int id, string avatarUrl);
         ReturnObject<UpdateUserDto> UpdateUser(UpdateUserDto dto);
         string DeleteAvatar(int id);
+        string GetName(int id);
     }
 }

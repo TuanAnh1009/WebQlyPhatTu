@@ -1,5 +1,5 @@
 ﻿@model PageResult<DaoTrang>
-@inject IDaoTrangServices getName;
+@inject IUserServices userServices;
 @inject IPhatTuServices phatTuServices;
 @inject IGetInfoFromToken getInfo;
 @inject IHttpContextAccessor HttpContextAccessor;
@@ -7,7 +7,7 @@
     string token = HttpContextAccessor.HttpContext.Request.Cookies["token"];
     List<ObjList> ListTruTri = phatTuServices.ListTruTri();
     PhatTu user = getInfo.GetUserFromToken(token);
-    string username = getName.GetNameTruTri(user.PhatTuId);
+    string username = userServices.GetName(user.PhatTuId);
 }
 
 <div class="content">
@@ -155,7 +155,7 @@
             <tbody>
                 @foreach (var daotrang in Model.Data)
                 {
-                    string tentrutri = getName.GetNameTruTri(daotrang.NguoiTruTri);
+                    string tentrutri = userServices.GetName(daotrang.NguoiTruTri);
                   
                     <tr>
                         <td>

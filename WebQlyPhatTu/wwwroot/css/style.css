@@ -326,6 +326,7 @@ main {
     display: flex;
     justify-content:end;
     padding: 0 16px;
+    gap: 10px;
 }
 
 .btn-ok {

@@ -1,5 +1,5 @@
 ﻿@model PageResult<DonDangKy>
-@inject IDaoTrangServices daoTrangServices
+@inject IUserServices userServices
 <div class="content">
     <div class="title-page">
         Đơn đăng ký
@@ -102,7 +102,7 @@
                                 string nguoixuly = "";
                                 if(dondangky.NguoiXuLy != null)
                                 {
-                                    nguoixuly = daoTrangServices.GetNameTruTri(dondangky.NguoiXuLy ?? 0);
+                                    nguoixuly = userServices.GetName(dondangky.NguoiXuLy ?? 0);
                                 } else
                                 {
                                     nguoixuly = "Chưa được xử lý";

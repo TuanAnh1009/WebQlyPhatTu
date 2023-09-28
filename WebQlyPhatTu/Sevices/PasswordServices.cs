@@ -79,11 +79,11 @@ namespace WebQlyPhatTu.Sevices
                 }
                 if (!BCrypt.Net.BCrypt.Verify(dto.OldPassword, User.PassWord))
                 {
-                    throw new Exception("Password is incorrect");
+                    throw new Exception("Mật khẩu không đúng.");
                 }
                 if (dto.NewPassword != dto.ReNewPassword)
                 {
-                    throw new Exception("Re-entered password is incorrect");
+                    throw new Exception("Nhập lại mật khẩu không chính xác.");
                 }
                 User.PassWord = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
                 User.NgayCapNhat = DateTime.UtcNow;

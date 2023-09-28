@@ -23,11 +23,12 @@ namespace WebQlyPhatTu.Controllers
         public IActionResult Index(string? name, string? phapdanh, string? email, int? gioitinh, Pagination? pagination)
         {
             string token = Request.Cookies["token"];
-            var user = getInfo.GetUserFromToken(token);
+            
             if (string.IsNullOrEmpty(token))
             {
                 return RedirectToAction("Login", "Account");
             }
+            var user = getInfo.GetUserFromToken(token);
             if (token != null && user.UserRoles.Role.Code == "ADMIN")
             {
                 var query = phatTuServices.DSPT(name, phapdanh, email, gioitinh);

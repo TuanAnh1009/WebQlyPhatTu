@@ -12,6 +12,5 @@ namespace WebQlyPhatTu.IServices
         IQueryable<DaoTrang> GetDaoTrang(string? noitochuc);
         IQueryable<DaoTrang> GetDaoTrangByTruTri(int trutriid,string? noitochuc);
         IQueryable<DaoTrang> GetDaoTrangActive(string? noitochuc);
-        string GetNameTruTri(int id);
     }
 }

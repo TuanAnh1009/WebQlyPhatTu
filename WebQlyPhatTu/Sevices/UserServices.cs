@@ -73,6 +73,11 @@ namespace WebQlyPhatTu.Sevices
                 };
             }
         }
+        public string GetName(int id)
+        {
+            var user = dbContext.PhatTu.SingleOrDefault(x => x.PhatTuId == id);
+            return user.Ho + " " + user.TenDem + " " + user.Ten;
+        }
 
         public ReturnObject<PhatTu> Login(Login dto)
         {
